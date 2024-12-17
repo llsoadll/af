@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Gestión de Estudiantes</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1 class="mb-4">Gestión de Estudiantes</h1>
+        
+        <div class="row mt-4">
+            <!-- Card Estudiantes -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Estudiantes</h5>
+                        <p class="card-text">Gestionar listado de estudiantes</p>
+                        <a href="/estudiantes" class="btn btn-primary">Ver Estudiantes</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solo mostrar para ADMIN -->
+            <div class="col-md-4" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nuevo Estudiante</h5>
+                        <p class="card-text">Agregar nuevos estudiantes</p>
+                        <a th:href="@{/nuevo}" class="btn btn-primary">Agregar Estudiante</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card Dashboard -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Dashboard</h5>
+                        <p class="card-text">Ver gráficos estadísticos por Cuatrimestre</p>
+                        <a href="/dashboard" class="btn btn-primary">Ver Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solo mostrar para ADMIN - Cargar CSV -->
+        <div class="row mt-4">
+            <div class="col-md-4" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Cargar Datos</h5>
+                        <p class="card-text">Cargar listado de estudiantes desde archivo CSV</p>
+                        <form th:action="@{/cargar-csv}" method="post" enctype="multipart/form-data">
+                            <input type="file" name="file" class="form-control mb-2" accept=".csv">
+                            <button type="submit" class="btn btn-success">Cargar CSV</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Estudiante</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+        <div class="container">
+            <h2 class="mb-4">Nuevo Estudiante</h2>
+
+            
+            <form th:action="@{/guardar}" th:object="${estudiante}" method="post" class="needs-validation" novalidate>
+                <input type="hidden" th:field="*{id}" />
+                
+                <div class="mb-3">
+                    <label for="nombreApellido" class="form-label">Nombre y Apellido</label>
+                    <input type="text" class="form-control" id="nombreApellido" th:field="*{nombreApellido}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="legajo" class="form-label">Legajo</label>
+                    <input type="text" class="form-control" id="legajo" th:field="*{legajo}">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="condicion" class="form-label">Condición</label>
+                    <select class="form-control" id="condicion" th:field="*{condicion}">
+                        <option value="regular">Regular</option>
+                        <option value="promoción">Promoción</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="notaFinal" class="form-label">Nota Final</label>
+                    <input type="number" class="form-control" id="notaFinal" th:field="*{notaFinal}" min="0" max="10" step="0.01">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="cuatrimestre" class="form-label">Cuatrimestre</label>
+                    <select class="form-control" id="cuatrimestre" th:field="*{cuatrimestre}">
+                        <option value="primer">Primer</option>
+                        <option value="segundo">Segundo</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="anio" class="form-label">Año</label>
+                    <input type="number" class="form-control" id="anio" th:field="*{anio}" required min="2017" max="2024">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <a href="/" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
