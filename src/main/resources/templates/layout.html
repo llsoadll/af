@@ -170,6 +170,7 @@
     
 
             <form th:action="@{/logout}" method="post" class="ms-auto">
+<<<<<<< HEAD
                 <div class="d-flex align-items-center">
                     <span class="nav-item nav-link text-light me-2" 
                           sec:authorize="isAuthenticated()"
@@ -179,6 +180,12 @@
                         <span class="d-none d-sm-inline">Cerrar Sesión</span>
                     </button>
                 </div>
+=======
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="d-none d-sm-inline">Cerrar Sesión</span>
+                </button>
+>>>>>>> origin/main
             </form>
         </div>
     </nav>
