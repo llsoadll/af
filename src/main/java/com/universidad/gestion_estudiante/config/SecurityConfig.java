@@ -2,6 +2,7 @@ package com.universidad.gestion_estudiante.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -16,16 +18,26 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/estudiantes").hasAnyRole("ADMIN", "INVITADO")
-                .requestMatchers("/dashboard").hasAnyRole("ADMIN", "INVITADO")
-                .requestMatchers("/editar/**", "/eliminar/**", "/nuevo", "/guardar", "/cargar-csv").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
+        .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+        // 1) Primero permitimos /registro y /usuarios/registro
+        .requestMatchers("/registro", "/usuarios/registro").permitAll()
+        // 2) Después especificamos las rutas que requieren rol
+        .requestMatchers("/estudiantes").hasAnyRole("ADMIN", "INVITADO", "USER")
+        .requestMatchers("/dashboard").hasAnyRole("ADMIN", "INVITADO", "USER")
+        .requestMatchers("/editar/**", "/eliminar/**", "/nuevo", "/guardar", "/cargar-csv").hasRole("ADMIN")
+        // 3) Finalmente /usuarios/** requiere rol ADMIN, excepto /usuarios/registro que ya se permitió arriba
+        .requestMatchers("/usuarios/**").hasRole("ADMIN")
+        .requestMatchers("/usuarios/nuevo-admin").hasRole("ADMIN")
+        .requestMatchers("/usuarios/guardar-admin").hasRole("ADMIN")
+        .requestMatchers("/auditoria").hasRole("ADMIN")
+        // 4) Las demás rutas exigen autenticación
+        .anyRequest().authenticated()
+    )
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)  // Cambiado a "/" con true para forzar redirección
@@ -37,4 +49,6 @@ public class SecurityConfig {
         
         return http.build();
     }
+
+    
 }

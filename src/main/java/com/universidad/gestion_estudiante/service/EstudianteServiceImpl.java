@@ -4,7 +4,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.universidad.gestion_estudiante.model.Estudiante;
+import com.universidad.gestion_estudiante.model.Usuario;
 import com.universidad.gestion_estudiante.repository.EstudianteRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.universidad.gestion_estudiante.dto.EstadisticasDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+
+import com.universidad.gestion_estudiante.model.Auditoria;
+import com.universidad.gestion_estudiante.repository.AuditoriaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class EstudianteServiceImpl implements EstudianteService {
@@ -20,6 +29,15 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Autowired
     private EstudianteRepository estudianteRepository;
+
+    @Autowired
+    private AuditoriaRepository auditoriaRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private HttpServletRequest request;
 
 
     @Override
@@ -123,6 +141,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     public void guardar(Estudiante estudiante) {
         estudianteRepository.save(estudiante);
+        registrarAuditoria("Guardar", "Estudiante", estudiante.getId());
     }
 
     @Override
@@ -133,8 +152,28 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     public void eliminar(Long id) {
         estudianteRepository.deleteById(id);
+        registrarAuditoria("Eliminar", "Estudiante", id);
     }
 
+    private void registrarAuditoria(String accion, String entidad, Long entidadId) {
+    String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    Usuario usuario = usuarioService.findByUsername(username);
+    
+    Auditoria auditoria = new Auditoria();
+    auditoria.setUsuario(username);
+    auditoria.setNombreCompleto(usuario != null ? usuario.getNombreCompleto() : username);
+    auditoria.setAccion(accion);
+    auditoria.setEntidad(entidad);
+    auditoria.setEntidadId(entidadId);
+    auditoria.setDetalles("Acción " + accion + " en " + entidad + " ID: " + entidadId);
+    auditoria.setIp(request.getRemoteAddr());
+    auditoria.setNavegador(request.getHeader("User-Agent"));
+    auditoria.setFecha(LocalDateTime.now());
+    
+    auditoriaRepository.save(auditoria);
+}
+
+    
     @Override
     public void cargarCsv(MultipartFile file) {
         try (BufferedReader br = new BufferedReader(
