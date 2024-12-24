@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Búsqueda de Estudiantes</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h2>Búsqueda de Estudiantes</h2>
+        
+        <!-- Search Forms -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <form th:action="@{/estudiantes}" method="get" class="needs-validation">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="searchTerm" 
+                               th:value="${searchTerm}" placeholder="Buscar por nombre y apellido...">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form th:action="@{/estudiantes}" method="get" class="needs-validation">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="legajoSearch" 
+                               th:value="${legajoSearch}" placeholder="Buscar por legajo...">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Buscar por Legajo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+
+        <div class="row mb-4">
+            <div class="col-12">
+
+                <a th:href="@{/}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+
+        <!-- Search Results - Only shown after search -->
+        <div th:if="${searchTerm != null or legajoSearch != null}" class="mt-4">
+
+            <div th:if="${not #lists.isEmpty(estudiantes)}" class="table-responsive">
+                <div class="alert alert-info">
+                    Se encontraron <span th:text="${#lists.size(estudiantes)}"></span> resultados.
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre y Apellido</th>
+                            <th>Legajo</th>
+                            <th>Condición</th>
+                            <th>Nota Final</th>
+                            <th>Cuatrimestre</th>
+                            <th>Año</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="estudiante : ${estudiantes}">
+                            <td th:text="${estudiante.nombreApellido}"></td>
+                            <td th:text="${estudiante.legajo}"></td>
+                            <td th:text="${estudiante.condicion}"></td>
+                            <td th:text="${estudiante.notaFinal}"></td>
+                            <td th:text="${estudiante.cuatrimestre}"></td>
+                            <td th:text="${estudiante.anio}"></td>
+                            <td>
+                                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                                    <a th:href="@{/editar/{id}(id=${estudiante.id})}" class="btn btn-warning">Editar</a>
+                                    <form th:action="@{/eliminar/{id}(id=${estudiante.id})}" method="post" style="display: inline;">
+                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                                        <button th:if="${#authentication.name == 'llsoadll'}" 
+                                        type="submit" 
+                                        class="btn btn-danger" 
+                                        onclick="return confirm('¿Está seguro de eliminar este estudiante?')">
+                                        Eliminar
+                                    </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Loading indicator -->
+            <div class="text-center loading-indicator" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+
+            <!-- Results table -->
+            <div th:if="${not #lists.isEmpty(estudiantes)}" class="table-responsive">
+                <div class="alert alert-info">
+                    Se encontraron <span th:text="${#lists.size(estudiantes)}"></span> resultados.
+                </div>
+                <table class="table table-striped table-hover">
+                    <!-- ... existing table headers and content ... -->
+                </table>
+            </div>
+            
+            <!-- No results message -->
+            <div th:if="${#lists.isEmpty(estudiantes)}" class="alert alert-warning">
+                No se encontraron estudiantes que coincidan con la búsqueda.
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        // Show loading indicator during form submission
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', () => {
+                document.querySelector('.loading-indicator').style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

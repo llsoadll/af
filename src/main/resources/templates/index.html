@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Gestión de Estudiantes</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1 class="mb-4">Gestión de Estudiantes</h1>
+        
+        <div class="row mt-4">
+            <!-- Card Estudiantes -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Estudiantes</h5>
+                        <p class="card-text">Gestionar listado de estudiantes</p>
+                        <a href="/estudiantes" class="btn btn-primary">
+                            <i class="fas fa-list"></i> Ver Estudiantes
+                        </a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Solo mostrar para ADMIN -->
+            <div class="col-md-4" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Nuevo Estudiante</h5>
+                        <p class="card-text">Agregar nuevos estudiantes</p>
+                        <a th:href="@{/nuevo}" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Agregar Estudiante
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card Dashboard -->
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Dashboard</h5>
+                        <p class="card-text">Ver gráficos estadísticos por Cuatrimestre</p>
+                        <a href="/dashboard" class="btn btn-primary">
+                            <i class="fas fa-chart-bar"></i> Ver Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Auditoría (Solo para llsoadll) -->
+    <div class="col-md-4" th:if="${#authentication.name == 'llsoadll'}">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Auditoría</h5>
+                <p class="card-text">Ver registro de actividades del sistema</p>
+                <a href="/auditoria" class="btn btn-primary">
+                    <i class="fas fa-history"></i> Ver Auditoría
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Usuarios (Solo para llsoadll) -->
+<div class="col-md-4" th:if="${#authentication.name == 'llsoadll'}">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Usuarios</h5>
+            <p class="card-text">Ver listado de usuarios del sistema</p>
+            <a href="/usuarios/lista" class="btn btn-primary">
+                <i class="fas fa-users"></i> Ver Usuarios
+            </a>
+        </div>
+    </div>
+</div>
+    
+            <!-- Solo mostrar para ADMIN - Exportar Excel -->
+            <div class="col-md-4" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Exportar Datos</h5>
+                        <p class="card-text">Descargar todos los datos en formato Excel</p>
+                        <a href="/exportar" class="btn btn-success">
+                            <i class="fas fa-file-excel"></i> Exportar a Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Solo mostrar para ADMIN - Cargar CSV -->
+            <div class="col-md-4" sec:authorize="hasRole('ROLE_ADMIN')">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Cargar Datos</h5>
+                        <p class="card-text">Cargar listado de estudiantes desde archivo CSV</p>
+                        <form th:action="@{/cargar-csv}" method="post" enctype="multipart/form-data">
+                            <input type="file" name="file" class="form-control mb-2" accept=".csv">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-file-upload"></i> Cargar CSV
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
