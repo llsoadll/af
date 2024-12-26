@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Lista de Usuarios</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2>Lista de Usuarios</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${listaUsuarios}">
+                <td th:text="${usuario.username}"></td>
+                <td th:text="${usuario.rol}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

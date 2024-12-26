@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Estadísticas de Estudiantes</title>
+</head>
+<body>
+    <h2>Estadísticas de Estudiantes</h2>
+
+    <!-- Formulario para seleccionar Año y Cuatrimestre -->
+    <form th:action="@{/estadisticas}" method="get">
+        <label for="anio">Año:</label>
+        <input type="number" id="anio" name="anio" required />
+
+        <label for="cuatrimestre">Cuatrimestre:</label>
+        <select id="cuatrimestre" name="cuatrimestre">
+            <option value="primer">Primer</option>
+            <option value="segundo">Segundo</option>
+        </select>
+
+        <button type="submit">Consultar</button>
+    </form>
+
+    <!-- Mostrar estadísticas solo si existen datos -->
+    <div th:if="${estadisticas != null}">
+        <h3>Resultados para [[${anio}]] - [[${cuatrimestre}]] Cuatrimestre</h3>
+        <p>Total de Estudiantes: <strong th:text="${estadisticas.totalEstudiantes}"></strong></p>
+        <p>Promedio de Notas: <strong th:text="${estadisticas.promedioNotas}"></strong></p>
+        <p>Cantidad de Promocionados: <strong th:text="${estadisticas.cantidadPromocionados}"></strong></p>
+        <p>Cantidad de Regulares: <strong th:text="${estadisticas.cantidadRegulares}"></strong></p>
+    </div>
+</body>
+</html>
