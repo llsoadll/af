@@ -10,9 +10,11 @@ COPY pom.xml .
 RUN chmod +x ./mvnw
 # Copy source code
 COPY src ./src
+# Copy .env file
+COPY .env .
 # Build the application
 RUN ./mvnw clean package -DskipTests
 # Expose port (adjust if needed)
 EXPOSE 8080
-# Run the jar file
-ENTRYPOINT ["java","-jar","target/gestion-estudiante-0.0.1-SNAPSHOT.jar"]
+# Run the jar file with environment variables
+ENTRYPOINT ["sh", "-c", "java -jar target/gestion-estudiante-0.0.1-SNAPSHOT.jar"]
