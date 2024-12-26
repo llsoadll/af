@@ -12,6 +12,7 @@ public class EstadisticasDTO {
     private int[] distribucionNotas;
     private int totalEstudiantes;
     
+    
 
     // Getters y Setters
 
