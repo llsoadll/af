@@ -131,43 +131,28 @@
             const comparativaPromedios = /*[[${comparativaPromedios}]]*/ [];
             const distribucionNotas = /*[[${distribucionNotas}]]*/ [];
 
-            // Gráfico de torta mejorado
-new Chart(document.getElementById('estudiantesPorCondicion'), {
-    type: 'doughnut', // Cambiamos a doughnut para mejor visualización
-    plugins: [ChartDataLabels], // Agregamos plugin de etiquetas
-    data: {
-        labels: ['Regulares', 'Promocionados'],
-        datasets: [{
-            data: [
-                estadisticas.cantidadRegulares || 0,
-                estadisticas.cantidadPromocionados || 0
-            ],
-            backgroundColor: ['#36A2EB', '#FF6384'],
-            borderWidth: 2
-        }]
-    },
-    options: {
-        plugins: {
-            datalabels: {
-                color: '#fff',
-                formatter: (value, ctx) => {
-                    let sum = 0;
-                    let dataArr = ctx.chart.data.datasets[0].data;
-                    dataArr.map(data => sum += data);
-                    let percentage = (value * 100 / sum).toFixed(1) + "%";
-                    return percentage;
-                }
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return `${context.label}: ${context.raw} estudiantes`;
+            // Gráfico de torta
+            new Chart(document.getElementById('estudiantesPorCondicion'), {
+                type: 'pie',
+                data: {
+                    labels: ['Regulares', 'Promocionados'],
+                    datasets: [{
+                        data: [
+                            estadisticas.cantidadRegulares || 0,
+                            estadisticas.cantidadPromocionados || 0
+                        ],
+                        backgroundColor: ['#36A2EB', '#FF6384']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
                     }
                 }
-            }
-        }
-    }
-});
+            });
 
             // Gráfico de barras
             new Chart(document.getElementById('promediosPorCuatrimestre'), {
