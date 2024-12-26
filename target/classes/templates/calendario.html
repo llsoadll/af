@@ -63,34 +63,26 @@
                                 });
 
                                 fetch('/calendario/eventos', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': document.querySelector("meta[name='_csrf']").content
-                                    },
-                                    body: JSON.stringify(result.value)
-                                })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Error al guardar el evento');
-                                    }
-                                    return response.json();
-                                })
-                                .then(evento => {
-                                    calendar.addEvent({
-                                        id: evento.id,
-                                        title: evento.title,
-                                        start: evento.start,
-                                        end: evento.end,
-                                        description: evento.description
-                                    });
-                                    Swal.fire('¡Éxito!', 'Evento creado correctamente', 'success');
-                                    calendar.refetchEvents();
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    Swal.fire('Error', 'No se pudo guardar el evento', 'error');
-                                });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(result.value)
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Error en la respuesta del servidor');
+    }
+    return response.json();
+})
+.then(eventoGuardado => {
+    calendar.addEvent(eventoGuardado);
+    Swal.fire('¡Éxito!', 'Evento guardado correctamente', 'success');
+})
+.catch(error => {
+    console.error('Error:', error);
+    Swal.fire('Error', 'No se pudo guardar el evento', 'error');
+});
                             }
                         });
                     },

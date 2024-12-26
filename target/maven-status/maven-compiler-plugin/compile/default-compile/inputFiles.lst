@@ -5,6 +5,7 @@
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/config/SecurityConfig.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/controller/AuditoriaController.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/controller/BackupController.java
+/Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/controller/CalendarController.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/controller/EstudianteController.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/controller/ExportController.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/controller/LoginController.java
@@ -13,9 +14,11 @@
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/dto/EstadisticasDTO.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/model/Auditoria.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/model/Estudiante.java
+/Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/model/Evento.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/model/Usuario.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/repository/AuditoriaRepository.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/repository/EstudianteRepository.java
+/Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/repository/EventoRepository.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/repository/UsuarioRepository.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/service/AuditoriaService.java
 /Users/pablosanchez/Documents/App Anatomía Funcional/Copia de gestion-estudiante 59/src/main/java/com/universidad/gestion_estudiante/service/BackupCleanupService.java

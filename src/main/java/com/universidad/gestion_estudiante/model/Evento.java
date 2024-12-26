@@ -1,5 +1,6 @@
 package com.universidad.gestion_estudiante.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,14 +11,23 @@ public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String title;
+    
+    @Column(name = "fecha_inicio")  // Rename from 'start'
     private String start;
+    
+    @Column(name = "fecha_fin")     // Rename from 'end'
     private String end;
+    
     private String color;
     private String description;
     
     //agregar Getters and setters
 
+
+
+    
     public Long getId() {
         return id;
     }

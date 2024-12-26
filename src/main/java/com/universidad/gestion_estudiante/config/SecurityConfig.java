@@ -38,8 +38,16 @@ public class SecurityConfig {
         .requestMatchers("/auditoria").hasRole("ADMIN")
         .requestMatchers("/forgot-password", "/reset-password").permitAll() 
         // 4) Las demás rutas exigen autenticación
+        .requestMatchers("/calendario/**").authenticated() // Permite acceso a usuarios autenticados
+        .requestMatchers("/calendario/eventos/**").authenticated()
         .anyRequest().authenticated()
     )
+
+// ... resto de la configuración ...
+.csrf(csrf -> csrf
+.ignoringRequestMatchers("/calendario/eventos/**") // Ignora CSRF para endpoints del calendario
+)
+
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)  // Cambiado a "/" con true para forzar redirección
