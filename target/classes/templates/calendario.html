@@ -26,178 +26,179 @@
                     },
                     editable: true,
                     selectable: true,
+                    eventDisplay: 'block',
+                    displayEventTime: false,
+                    eventDidMount: function(info) {
+                        info.el.style.backgroundColor = info.event.backgroundColor || info.event.extendedProps.color;
+                        info.el.style.borderColor = info.event.backgroundColor || info.event.extendedProps.color;
+                    },
+                    eventContent: function(arg) {
+                        return {
+                            html: `
+                                <div class="fc-event-main-frame">
+                                    <div class="fc-event-title-container">
+                                        <div class="fc-event-title">${arg.event.title}</div>
+                                    </div>
+                                </div>
+                            `
+                        };
+                    },
                     select: function(info) {
-    Swal.fire({
-        title: 'Crear Evento',
-        html: `
-            <div class="mb-3">
-                <label class="form-label">Título:</label>
-                <input id="swal-title" class="swal2-input" placeholder="Título">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Descripción:</label>
-                <textarea id="swal-description" class="swal2-textarea" placeholder="Descripción"></textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Fecha inicio:</label>
-                <input id="swal-start" type="datetime-local" class="swal2-input" value="${info.startStr}">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Fecha fin:</label>
-                <input id="swal-end" type="datetime-local" class="swal2-input" value="${info.endStr || info.startStr}">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Color:</label>
-                <select id="swal-color" class="swal2-input">
-                    <option value="#3498db">Azul</option>
-                    <option value="#e74c3c">Rojo</option>
-                    <option value="#2ecc71">Verde</option>
-                    <option value="#f1c40f">Amarillo</option>
-                </select>
-            </div>
-        `,
-        showCancelButton: true,
-        confirmButtonText: 'Guardar',
-        cancelButtonText: 'Cancelar',
-        preConfirm: () => {
-            const title = document.getElementById('swal-title').value;
-            const description = document.getElementById('swal-description').value;
-            const color = document.getElementById('swal-color').value;
-            const start = document.getElementById('swal-start').value;
-            const end = document.getElementById('swal-end').value;
-            
-            if (!title) {
-                Swal.showValidationMessage('Por favor ingrese un título');
-                return false;
-            }
+                        Swal.fire({
+                            title: 'Crear Evento',
+                            html: `
+                                <div class="mb-3">
+                                    <label class="form-label">Título:</label>
+                                    <input id="swal-title" class="swal2-input" placeholder="Título">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción:</label>
+                                    <textarea id="swal-description" class="swal2-textarea" placeholder="Descripción"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha inicio:</label>
+                                    <input id="swal-start" type="datetime-local" class="swal2-input" value="${info.startStr}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Fecha fin:</label>
+                                    <input id="swal-end" type="datetime-local" class="swal2-input" value="${info.endStr || info.startStr}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Color:</label>
+                                    <select id="swal-color" class="swal2-input">
+                                        <option value="#3498db">Azul</option>
+                                        <option value="#e74c3c">Rojo</option>
+                                        <option value="#2ecc71">Verde</option>
+                                        <option value="#f1c40f">Amarillo</option>
+                                    </select>
+                                </div>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Guardar',
+                            cancelButtonText: 'Cancelar',
+                            preConfirm: () => {
+                                const title = document.getElementById('swal-title').value;
+                                const description = document.getElementById('swal-description').value;
+                                const color = document.getElementById('swal-color').value;
+                                const start = document.getElementById('swal-start').value;
+                                const end = document.getElementById('swal-end').value;
+                                
+                                if (!title) {
+                                    Swal.showValidationMessage('Por favor ingrese un título');
+                                    return false;
+                                }
 
-            return {
-                title: title,
-                description: description,
-                color: color,
-                start: start,
-                end: end || start
-            }
-        }
-    }).then((result) => {
+                                return {
+                                    title: title,
+                                    description: description,
+                                    color: color,
+                                    start: start,
+                                    end: end || start
+                                }
+                            }
+                        }).then((result) => {
                             if (result.isConfirmed) {
-                                Swal.fire({
-                                    title: 'Guardando...',
-                                    allowOutsideClick: false,
-                                    didOpen: () => {
-                                        Swal.showLoading();
-                                    }
-                                });
-
                                 fetch('/calendario/eventos', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(result.value)
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Error en la respuesta del servidor');
-    }
-    return response.json();
-})
-.then(eventoGuardado => {
-    calendar.addEvent(eventoGuardado);
-    Swal.fire('¡Éxito!', 'Evento guardado correctamente', 'success');
-})
-.catch(error => {
-    console.error('Error:', error);
-    Swal.fire('Error', 'No se pudo guardar el evento', 'error');
-});
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(result.value)
+                                })
+                                .then(response => {
+                                    if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                                    return response.json();
+                                })
+                                .then(eventoGuardado => {
+                                    calendar.addEvent(eventoGuardado);
+                                    Swal.fire('¡Éxito!', 'Evento guardado correctamente', 'success');
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire('Error', 'No se pudo guardar el evento', 'error');
+                                });
                             }
                         });
                     },
                     eventClick: function(info) {
-    Swal.fire({
-        title: 'Gestionar Evento',
-        html: `
-            <div class="mb-3">
-                <label class="form-label">Título:</label>
-                <input id="edit-title" class="swal2-input" value="${info.event.title}">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Descripción:</label>
-                <textarea id="edit-description" class="swal2-textarea">${info.event.extendedProps.description || ''}</textarea>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Color:</label>
-                <select id="edit-color" class="swal2-input">
-                    <option value="#3498db">Azul</option>
-                    <option value="#e74c3c">Rojo</option>
-                    <option value="#2ecc71">Verde</option>
-                    <option value="#f1c40f">Amarillo</option>
-                </select>
-            </div>
-        `,
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Guardar',
-        denyButtonText: 'Eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Actualizar evento
-            const eventoActualizado = {
-                id: info.event.id,
-                title: document.getElementById('edit-title').value,
-                description: document.getElementById('edit-description').value,
-                color: document.getElementById('edit-color').value,
-                start: info.event.startStr,
-                end: info.event.endStr
-            };
+                        Swal.fire({
+                            title: 'Gestionar Evento',
+                            html: `
+                                <div class="mb-3">
+                                    <label class="form-label">Título:</label>
+                                    <input id="edit-title" class="swal2-input" value="${info.event.title}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Descripción:</label>
+                                    <textarea id="edit-description" class="swal2-textarea">${info.event.extendedProps.description || ''}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Color:</label>
+                                    <select id="edit-color" class="swal2-input">
+                                        <option value="#3498db">Azul</option>
+                                        <option value="#e74c3c">Rojo</option>
+                                        <option value="#2ecc71">Verde</option>
+                                        <option value="#f1c40f">Amarillo</option>
+                                    </select>
+                                </div>
+                            `,
+                            showDenyButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: 'Guardar',
+                            denyButtonText: 'Eliminar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const eventoActualizado = {
+                                    id: info.event.id,
+                                    title: document.getElementById('edit-title').value,
+                                    description: document.getElementById('edit-description').value,
+                                    color: document.getElementById('edit-color').value,
+                                    start: info.event.startStr,
+                                    end: info.event.endStr
+                                };
 
-            fetch(`/calendario/eventos/${info.event.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(eventoActualizado)
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('Error al actualizar');
-                return response.json();
-            })
-            .then(updated => {
-                info.event.setProp('title', updated.title);
-                info.event.setExtendedProp('description', updated.description);
-                info.event.setProp('backgroundColor', updated.color);
-                Swal.fire('¡Éxito!', 'Evento actualizado correctamente', 'success');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire('Error', 'No se pudo actualizar el evento', 'error');
-            });
-        } else if (result.isDenied) {
-            // Eliminar evento
-            fetch(`/calendario/eventos/${info.event.id}`, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('Error al eliminar');
-                info.event.remove();
-                Swal.fire('Eliminado', 'El evento ha sido eliminado', 'success');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire('Error', 'No se pudo eliminar el evento', 'error');
-            });
-        }
-    });
-},
-                    events: '/calendario/eventos'  // Endpoint para cargar eventos
+                                fetch(`/calendario/eventos/${info.event.id}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(eventoActualizado)
+                                })
+                                .then(response => {
+                                    if (!response.ok) throw new Error('Error al actualizar');
+                                    return response.json();
+                                })
+                                .then(updated => {
+                                    info.event.setProp('title', updated.title);
+                                    info.event.setExtendedProp('description', updated.description);
+                                    info.event.setProp('backgroundColor', updated.color);
+                                    Swal.fire('¡Éxito!', 'Evento actualizado correctamente', 'success');
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire('Error', 'No se pudo actualizar el evento', 'error');
+                                });
+                            } else if (result.isDenied) {
+                                fetch(`/calendario/eventos/${info.event.id}`, {
+                                    method: 'DELETE'
+                                })
+                                .then(response => {
+                                    if (!response.ok) throw new Error('Error al eliminar');
+                                    info.event.remove();
+                                    Swal.fire('Eliminado', 'El evento ha sido eliminado', 'success');
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire('Error', 'No se pudo eliminar el evento', 'error');
+                                });
+                            }
+                        });
+                    },
+                    events: '/calendario/eventos'
                 });
-                calendar.render(); // Asegúrate de que esta línea esté presente
+                calendar.render();
             });
-
-
-        
-
         </script>
     </div>
 </body>
