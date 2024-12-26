@@ -132,67 +132,55 @@
             const distribucionNotas = /*[[${distribucionNotas}]]*/ [];
 
             // Gráfico de torta
-            // Gráfico de condición de estudiantes mejorado
             new Chart(document.getElementById('estudiantesPorCondicion'), {
-    type: 'doughnut',
-    plugins: [ChartDataLabels],
-    data: {
-        labels: ['Regulares', 'Promocionados'],
-        datasets: [{
-            data: [
-            estadisticas.cantidadRegulares,
-            estadisticas.cantidadPromocionados
-            ],
-            backgroundColor: ['#36A2EB', '#FF6384'],
-            borderWidth: 2
-        }]
-    },
-    options: {
-        animation: {
-            animateScale: true,
-            animateRotate: true
-        },
-        plugins: {
-            datalabels: {
-                color: '#fff',
-                formatter: (value, ctx) => {
-                    const total = ctx.chart.data.datasets[0].data.reduce((a,b) => a + b);
-                    return `${((value * 100) / total).toFixed(1)}%`;
+                type: 'pie',
+                data: {
+                    labels: ['Regulares', 'Promocionados'],
+                    datasets: [{
+                        data: [
+                            estadisticas.cantidadRegulares || 0,
+                            estadisticas.cantidadPromocionados || 0
+                        ],
+                        backgroundColor: ['#36A2EB', '#FF6384']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
                 }
-            }
-        }
-    }
-});
+            });
 
             // Gráfico de barras
-            // Gráfico de promedio por cuatrimestre mejorado
             new Chart(document.getElementById('promediosPorCuatrimestre'), {
-    type: 'bar',
-    plugins: [ChartDataLabels],
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Promedio por Cuatrimestre',
-            data: promedios,
-            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 2
-        }]
-    },
-    options: {
-        animation: {
-            duration: 2000,
-            easing: 'easeInOutQuart'
-        },
-        plugins: {
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                formatter: value => value.toFixed(2)
-            }
-        }
-    }
-});
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Promedio por Cuatrimestre',
+                        data: promedios,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
 
             // Gráfico de comparativa
             new Chart(document.getElementById('comparativaCuatrimestres'), {
@@ -216,41 +204,26 @@
                 }
             });
 
-            // Gráfico de distribución mejorado
+            // Gráfico de distribución
             new Chart(document.getElementById('distribucionNotas'), {
-    type: 'bar',
-    plugins: [ChartDataLabels],
-    data: {
-        labels: ['1-2', '3-4', '5-6', '7-8', '9-10'],
-        datasets: [{
-            label: 'Estudiantes',
-            data: distribucionNotas,  // Use JavaScript variable instead of Thymeleaf expression
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(255, 159, 64, 0.7)',
-                'rgba(255, 205, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(54, 162, 235, 0.7)'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        animation: {
-            duration: 1500,
-            easing: 'easeInOutQuart'
-        },
-        plugins: {
-            datalabels: {
-                color: '#fff',
-                font: {
-                    weight: 'bold'
+                type: 'bar',
+                data: {
+                    labels: ['1-2', '3-4', '5-6', '7-8', '9-10'],
+                    datasets: [{
+                        label: 'Cantidad de Estudiantes',
+                        data: distribucionNotas,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                    }]
                 },
-                formatter: value => `${value} estudiantes`
-            }
-        }
-    }
-});
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
             /*]]>*/
         </script>
 
