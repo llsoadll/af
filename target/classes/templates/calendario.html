@@ -5,6 +5,45 @@
 <head>
     <title>Calendario Académico</title>
     <style>
+        /* SweetAlert2 Custom Styles */
+        .swal2-popup.swal2-modal {
+            border-radius: 15px !important;
+            padding: 2rem !important;
+            background-color: #fff !important;
+        }
+
+        .swal2-title.swal2-title {
+            color: #2c3e50 !important;
+            font-size: 1.8em !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .swal2-input.swal2-input, 
+        .swal2-textarea.swal2-textarea {
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 8px !important;
+            padding: 12px !important;
+            margin: 8px 0 !important;
+            box-shadow: none !important;
+            width: 100% !important;
+        }
+
+        .swal2-actions .swal2-confirm {
+            background-color: #3498db !important;
+            border-radius: 20px !important;
+            padding: 12px 24px !important;
+        }
+
+        .swal2-actions .swal2-deny {
+            background-color: #e74c3c !important;
+            border-radius: 20px !important;
+        }
+
+        .swal2-actions .swal2-cancel {
+            background-color: #95a5a6 !important;
+            border-radius: 20px !important;
+        }
+
         /* Estilos base del calendario */
         .fc {
             background: #fff;
@@ -161,13 +200,13 @@
                                     <textarea id="swal-description" class="swal2-textarea" placeholder="Descripción"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Fecha inicio:</label>
-                                    <input id="swal-start" type="datetime-local" class="swal2-input" value="${info.startStr}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Fecha fin:</label>
-                                    <input id="swal-end" type="datetime-local" class="swal2-input" value="${info.endStr || info.startStr}">
-                                </div>
+    <label class="form-label">Fecha inicio:</label>
+    <input id="swal-start" type="date" class="swal2-input" value="${info.startStr.split('T')[0]}">
+</div>
+<div class="mb-3">
+    <label class="form-label">Fecha fin:</label>
+    <input id="swal-end" type="date" class="swal2-input" value="${(info.endStr || info.startStr).split('T')[0]}">
+</div>
                                 <div class="mb-3">
                                     <label class="form-label">Color:</label>
                                     <select id="swal-color" class="swal2-input">
