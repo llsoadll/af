@@ -4,6 +4,62 @@
       layout:decorate="~{layout}">
 <head>
     <title>Calendario Académico</title>
+    <style>
+        /* Estilos responsive para el calendario */
+        @media (max-width: 768px) {
+            .fc-toolbar.fc-header-toolbar {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .fc-toolbar-title {
+                font-size: 1.2em !important;
+                margin: 0.5rem 0 !important;
+            }
+
+            .fc-button {
+                padding: 0.4em 0.65em !important;
+                font-size: 0.9em !important;
+            }
+
+            .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin: 0.2rem 0;
+            }
+
+            .fc-today-button {
+                margin: 0 0.5rem !important;
+            }
+
+            .fc-daygrid-day-number {
+                font-size: 0.9em;
+            }
+
+            .fc-event {
+                margin: 1px 0 !important;
+                padding: 1px !important;
+            }
+
+            .fc-event-title {
+                font-size: 0.85em !important;
+            }
+        }
+
+        /* Ajustes para pantallas muy pequeñas */
+        @media (max-width: 480px) {
+            .fc-toolbar-title {
+                font-size: 1em !important;
+            }
+
+            .fc-button {
+                padding: 0.3em 0.5em !important;
+                font-size: 0.8em !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
