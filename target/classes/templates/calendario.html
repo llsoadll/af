@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Calendario Académico</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card">
+            <div class="card-body">
+                <div id="calendario"></div>
+            </div>
+        </div>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendario');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'es',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    editable: true,
+                    selectable: true,
+                    select: function(info) {
+                        Swal.fire({
+                            title: 'Crear Evento',
+                            html: `
+                                <input id="swal-title" class="swal2-input" placeholder="Título">
+                                <textarea id="swal-description" class="swal2-textarea" placeholder="Descripción"></textarea>
+                            `,
+                            showCancelButton: true,
+                            confirmButtonText: 'Guardar',
+                            cancelButtonText: 'Cancelar',
+                            preConfirm: () => {
+                                const title = document.getElementById('swal-title').value;
+                                const description = document.getElementById('swal-description').value;
+                                
+                                if (!title) {
+                                    Swal.showValidationMessage('Por favor ingrese un título');
+                                    return false;
+                                }
+
+                                return {
+                                    title: title,
+                                    description: description,
+                                    start: info.startStr,
+                                    end: info.endStr || info.startStr
+                                }
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Guardando...',
+                                    allowOutsideClick: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
+
+                                fetch('/calendario/eventos', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector("meta[name='_csrf']").content
+                                    },
+                                    body: JSON.stringify(result.value)
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Error al guardar el evento');
+                                    }
+                                    return response.json();
+                                })
+                                .then(evento => {
+                                    calendar.addEvent({
+                                        id: evento.id,
+                                        title: evento.title,
+                                        start: evento.start,
+                                        end: evento.end,
+                                        description: evento.description
+                                    });
+                                    Swal.fire('¡Éxito!', 'Evento creado correctamente', 'success');
+                                    calendar.refetchEvents();
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire('Error', 'No se pudo guardar el evento', 'error');
+                                });
+                            }
+                        });
+                    },
+                    eventClick: function(info) {
+                        Swal.fire({
+                            title: 'Eliminar Evento',
+                            text: `¿Desea eliminar "${info.event.title}"?`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Eliminar',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                fetch(`/calendario/eventos/${info.event.id}`, {
+                                    method: 'DELETE'
+                                }).then(() => {
+                                    info.event.remove();
+                                });
+                            }
+                        });
+                    },
+                    events: '/calendario/eventos'
+                });
+                calendar.render();
+            });
+        </script>
+    </div>
+</body>
+</html>
