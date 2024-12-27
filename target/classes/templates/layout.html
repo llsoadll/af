@@ -19,24 +19,54 @@
             top: 0;
             background: #006766;
             color: white;
-            padding: 1rem;
-            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
             z-index: 1000;
         }
 
         .sidebar-header {
+        padding: 0.75rem;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .sidebar-header i {
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+        display: block;
+    }
+    
+    .sidebar-header span {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
             padding: 1rem;
-            font-size: 1.2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            /* Scrollbar styling */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
-
+    
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+    
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 3px;
+        }
+    
         .nav-item {
-            margin: 0.5rem 0;
+            margin: 0.75rem 0;
         }
-
+    
         .nav-link {
             color: white !important;
             padding: 0.75rem 1rem;
@@ -46,46 +76,127 @@
             gap: 10px;
             transition: 0.3s;
         }
-
+    
         .nav-link:hover {
             background: rgba(255,255,255,0.1);
         }
-
+    
+        /* User Profile */
+        .user-profile {
+            padding: 0.6rem 1rem;
+            border-bottom: 0.5px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.3rem;
+        }
+        
+        .user-avatar i {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.25rem;
+            text-align: center;
+        }
+        
+        .user-status {
+            font-size: 0.7rem;
+            color: #4CD964;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CD964;
+            border-radius: 50%;
+        }
+    
+        /* Footer */
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+    
+        /* Main Content */
         .main-content {
             margin-left: 250px;
             padding: 1rem;
-            transition: 0.3s;
             min-height: 100vh;
         }
-
-        .sidebar-footer {
-            position: absolute;
-            bottom: 1rem;
-            width: calc(100% - 2rem);
-        }
-
+    
         /* Responsive */
         @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
+    .sidebar {
+        transform: translateX(-100%);
+        transition: all 0.3s ease-in-out;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        z-index: 1060;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 4rem 1rem 1rem 1rem;
+        transition: all 0.3s ease-in-out;
+    }
 
-            #sidebarToggle {
-                position: fixed;
-                top: 1rem;
-                left: 1rem;
-                z-index: 1001;
-            }
-        }
+    #sidebarToggle {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1050;
+        background: white;
+        border: 2px solid #006766;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #006766;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    #sidebarToggle:hover {
+        background: #006766;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    #sidebarToggle:active {
+        transform: scale(0.95);
+    }
+
+    .sidebar.active + #sidebarToggle {
+        background: white;
+        color: #006766;
+        left: calc(250px + 1rem);
+    }
+}
     </style>
+
 </head>
 <body>
     <!-- Sidebar -->
@@ -97,8 +208,15 @@
         
         <nav class="sidebar-nav">
             <!-- Usuario actual -->
-            <div class="nav-item text-center mb-4">
-                <span class="nav-link" sec:authentication="name"></span>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name text-center" sec:authentication="name"></div>
+                <div class="user-status">
+                    <span class="status-dot"></span>
+                    <span>En línea</span>
+                </div>
             </div>
             
             <div class="nav-item">

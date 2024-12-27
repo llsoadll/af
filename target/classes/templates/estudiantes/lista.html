@@ -8,117 +8,134 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h2>Búsqueda de Estudiantes</h2>
-        
-        <!-- Search Forms -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-6">
-                <form th:action="@{/estudiantes}" method="get" class="needs-validation">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="searchTerm" 
-                               th:value="${searchTerm}" placeholder="Buscar por nombre y apellido...">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Buscar
-                        </button>
+        <!-- Header Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title text-primary mb-4">
+                    <i class="fas fa-search me-2"></i>Búsqueda de Estudiantes
+                </h2>
+                
+                <!-- Search Forms -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">
+                                    <i class="fas fa-user me-2"></i>Buscar por Nombre
+                                </h5>
+                                <form th:action="@{/estudiantes}" method="get" class="needs-validation">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="searchTerm" 
+                                               th:value="${searchTerm}" placeholder="Ingrese nombre y apellido...">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-search"></i> Buscar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </form>
-            </div>
-            <div class="col-md-6">
-                <form th:action="@{/estudiantes}" method="get" class="needs-validation">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="legajoSearch" 
-                               th:value="${legajoSearch}" placeholder="Buscar por legajo...">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Buscar por Legajo
-                        </button>
+                    
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">
+                                    <i class="fas fa-id-card me-2"></i>Buscar por Legajo
+                                </h5>
+                                <form th:action="@{/estudiantes}" method="get" class="needs-validation">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="legajoSearch" 
+                                               th:value="${legajoSearch}" placeholder="Ingrese número de legajo...">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-search"></i> Buscar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
-
-        <div class="row mb-4">
-
-        <!-- Search Results - Only shown after search -->
-        <div th:if="${searchTerm != null or legajoSearch != null}" class="mt-4">
-
-            <div th:if="${not #lists.isEmpty(estudiantes)}" class="table-responsive">
-                <div class="alert alert-info">
-                    Se encontraron <span th:text="${#lists.size(estudiantes)}"></span> resultados.
+        <!-- Results Section -->
+        <div class="card">
+            <div class="card-body">
+                <div th:if="${searchTerm != null or legajoSearch != null}" class="mt-4">
+                    <div th:if="${not #lists.isEmpty(estudiantes)}" class="table-responsive">
+                        <div class="alert alert-info d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Se encontraron <span class="fw-bold mx-1" th:text="${#lists.size(estudiantes)}"></span> resultados.
+                        </div>
+                        <table class="table table-hover table-striped align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nombre y Apellido</th>
+                                    <th>Legajo</th>
+                                    <th>Condición</th>
+                                    <th>Nota Final</th>
+                                    <th>Cuatrimestre</th>
+                                    <th>Año</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="estudiante : ${estudiantes}">
+                                    <td th:text="${estudiante.nombreApellido}"></td>
+                                    <td><span class="badge bg-secondary" th:text="${estudiante.legajo}"></span></td>
+                                    <td>
+                                        <span th:class="${estudiante.condicion == 'promoción'} ? 'badge bg-success' : 'badge bg-primary'"
+                                              th:text="${estudiante.condicion}"></span>
+                                    </td>
+                                    <td th:text="${estudiante.notaFinal}"></td>
+                                    <td th:text="${estudiante.cuatrimestre}"></td>
+                                    <td th:text="${estudiante.anio}"></td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                                               th:href="@{/editar/{id}(id=${estudiante.id})}" 
+                                               class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button th:if="${#authentication.name == 'llsoadll'}"
+                                                    type="button"
+                                                    class="btn btn-danger btn-sm"
+                                                    th:onclick="'eliminarEstudiante(' + ${estudiante.id} + ')'">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div th:if="${#lists.isEmpty(estudiantes)}" class="alert alert-warning d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        No se encontraron estudiantes que coincidan con la búsqueda.
+                    </div>
                 </div>
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Nombre y Apellido</th>
-                            <th>Legajo</th>
-                            <th>Condición</th>
-                            <th>Nota Final</th>
-                            <th>Cuatrimestre</th>
-                            <th>Año</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="estudiante : ${estudiantes}">
-                            <td th:text="${estudiante.nombreApellido}"></td>
-                            <td th:text="${estudiante.legajo}"></td>
-                            <td th:text="${estudiante.condicion}"></td>
-                            <td th:text="${estudiante.notaFinal}"></td>
-                            <td th:text="${estudiante.cuatrimestre}"></td>
-                            <td th:text="${estudiante.anio}"></td>
-                            <td>
-                                <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                                    <a th:href="@{/editar/{id}(id=${estudiante.id})}" class="btn btn-warning">Editar</a>
-                                    <form th:action="@{/eliminar/{id}(id=${estudiante.id})}" method="post" style="display: inline;">
-                                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-                                        <button th:if="${#authentication.name == 'llsoadll'}" 
-                                        type="submit" 
-                                        class="btn btn-danger" 
-                                        onclick="return confirm('¿Está seguro de eliminar este estudiante?')">
-                                        Eliminar
-                                    </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Loading indicator -->
-            <div class="text-center loading-indicator" style="display: none;">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando...</span>
-                </div>
-            </div>
-
-            <!-- Results table -->
-            <div th:if="${not #lists.isEmpty(estudiantes)}" class="table-responsive">
-                <div class="alert alert-info">
-                    Se encontraron <span th:text="${#lists.size(estudiantes)}"></span> resultados.
-                </div>
-                <table class="table table-striped table-hover">
-                    <!-- ... existing table headers and content ... -->
-                </table>
-            </div>
-            
-            <!-- No results message -->
-            <div th:if="${#lists.isEmpty(estudiantes)}" class="alert alert-warning">
-                No se encontraron estudiantes que coincidan con la búsqueda.
             </div>
         </div>
     </div>
 
-    
-
-    <script>
-        // Show loading indicator during form submission
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', () => {
-                document.querySelector('.loading-indicator').style.display = 'block';
+    <script th:inline="javascript">
+        function eliminarEstudiante(id) {
+            Swal.fire({
+                title: '¿Está seguro?',
+                text: "Esta acción no se puede deshacer",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.querySelector(`.eliminar-form-${id}`).submit();
+                }
             });
-        });
+        }
     </script>
 </body>
 </html>
