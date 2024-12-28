@@ -99,12 +99,12 @@
                                                class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <button th:if="${#authentication.name == 'llsoadll'}"
-                                                    type="button"
-                                                    class="btn btn-danger btn-sm"
-                                                    th:onclick="'eliminarEstudiante(' + ${estudiante.id} + ')'">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                      th:action="@{/eliminar/{id}(id=${estudiante.id})}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este estudiante?');">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
                                         </div>
                                     </td>
                                 </tr>
