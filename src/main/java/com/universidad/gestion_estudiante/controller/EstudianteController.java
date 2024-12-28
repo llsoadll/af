@@ -21,7 +21,7 @@ public class EstudianteController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/estudiantes")

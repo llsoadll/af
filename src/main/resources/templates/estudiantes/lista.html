@@ -93,18 +93,23 @@
                                     <td th:text="${estudiante.cuatrimestre}"></td>
                                     <td th:text="${estudiante.anio}"></td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div class="btn-group">
                                             <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                                                th:href="@{/editar/{id}(id=${estudiante.id})}" 
-                                               class="btn btn-warning btn-sm">
+                                               class="btn btn-warning btn-sm me-2">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                      th:action="@{/eliminar/{id}(id=${estudiante.id})}" method="post" class="d-inline">
-                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este estudiante?');">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </form>
+                                            
+                                            <form th:if="${#authentication.name == 'llsoadll'}"
+                                                  th:action="@{/eliminar/{id}(id=${estudiante.id})}" 
+                                                  method="post" 
+                                                  class="d-inline">
+                                                <button type="submit" 
+                                                        class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('¿Está seguro de que desea eliminar este estudiante?');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
