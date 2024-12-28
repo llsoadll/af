@@ -397,6 +397,22 @@ body {
                 </a>
             </div>
 
+            <!-- Botón Exportar a Excel (solo admin) -->
+    <div class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/exportar}" class="nav-link">
+            <i class="fas fa-file-excel"></i>
+            <span>Exportar a Excel</span>
+        </a>
+    </div>
+
+    <!-- Botón Cargar CSV (solo admin) -->
+    <div class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+        <a th:href="@{/cargar-csv}" class="nav-link">
+            <i class="fas fa-file-upload"></i>
+            <span>Cargar CSV</span>
+        </a>
+    </div>
+
             <!-- Admin Links -->
             <div th:if="${#authentication.name == 'llsoadll'}" class="nav-item">
                 <a th:href="@{/usuarios/registro}" class="nav-link">

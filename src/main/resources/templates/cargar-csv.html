@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Cargar CSV</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Cargar Datos</h5>
+                            <p class="card-text">Cargar listado de estudiantes desde archivo CSV</p>
+                            <form th:action="@{/cargar-csv}" method="post" enctype="multipart/form-data">
+                                <input type="file" name="file" class="form-control mb-2" accept=".csv" required>
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-file-upload"></i> Cargar CSV
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

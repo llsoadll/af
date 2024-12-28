@@ -87,16 +87,21 @@ public class EstudianteController {
         return "estadisticas";
     }
 
-    @PostMapping("/cargar-csv")
-    public String cargarCsv(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        try {
-            service.cargarCsv(file);
-            redirectAttributes.addFlashAttribute("mensaje", "Archivo CSV cargado exitosamente");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al cargar el archivo: " + e.getMessage());
-        }
-        return "redirect:/estudiantes";
+    @GetMapping("/cargar-csv")
+public String mostrarCargarCsv() {
+    return "cargar-csv";
+}
+
+@PostMapping("/cargar-csv")
+public String cargarCsv(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+    try {
+        service.cargarCsv(file);
+        redirectAttributes.addFlashAttribute("mensaje", "Archivo CSV cargado exitosamente");
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", "Error al cargar el archivo: " + e.getMessage());
     }
+    return "redirect:/estudiantes";
+}
 
     @GetMapping("/dashboard")
 public String mostrarDashboard(
