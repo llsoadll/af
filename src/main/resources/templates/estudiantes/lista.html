@@ -84,8 +84,10 @@
                                     <td th:text="${estudiante.nombreApellido}"></td>
                                     <td><span class="badge bg-secondary" th:text="${estudiante.legajo}"></span></td>
                                     <td>
-                                        <span th:class="${estudiante.condicion == 'promoción'} ? 'badge bg-success' : 'badge bg-primary'"
-                                              th:text="${estudiante.condicion}"></span>
+                                        <span th:with="condicion=${#strings.toLowerCase(estudiante.condicion)}"
+                                              th:class="${condicion == 'promoción' || condicion == 'promocion'} ? 'badge bg-success text-white' : 'badge bg-primary'"
+                                              th:text="${estudiante.condicion}">
+                                        </span>
                                     </td>
                                     <td th:text="${estudiante.notaFinal}"></td>
                                     <td th:text="${estudiante.cuatrimestre}"></td>
