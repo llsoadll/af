@@ -379,6 +379,24 @@ body {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     }
+
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+    
+    .nav-item.dropdown .fa-chevron-down {
+        transition: transform 0.3s;
+    }
+    
+    .nav-item.dropdown .collapsed .fa-chevron-down {
+        transform: rotate(-90deg);
+    }
+    
+    #estadisticasSubmenu {
+        margin-left: 1rem;
+        border-left: 1px solid rgba(255,255,255,0.1);
+    }
     </style>
 
 </head>
@@ -403,19 +421,28 @@ body {
                 </div>
             </div>
 
-            <div class="nav-item">
-                <a th:href="@{/dashboard}" class="nav-link">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Estadísticas por cuatrimestre</span>
-                </a>
-            </div>
-
-            <div class="nav-item">
-                <a th:href="@{/estadisticas-globales}" class="nav-link">
-                    <i class="fas fa-chart-pie"></i>
-                    <span>Estadísticas Globales</span>
-                </a>
-            </div>
+            <!-- Replace the two separate nav-items with this dropdown -->
+<div class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#estadisticasSubmenu">
+        <i class="fas fa-chart-line"></i>
+        <span>Estadísticas</span>
+        <i class="fas fa-chevron-down ms-2"></i>
+    </a>
+    <div class="collapse" id="estadisticasSubmenu">
+        <div class="nav-item ps-4">
+            <a th:href="@{/dashboard}" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Por cuatrimestre</span>
+            </a>
+        </div>
+        <div class="nav-item ps-4">
+            <a th:href="@{/estadisticas-globales}" class="nav-link">
+                <i class="fas fa-chart-pie"></i>
+                <span>Globales</span>
+            </a>
+        </div>
+    </div>
+</div>
             
             <div class="nav-item">
                 <a th:href="@{/estudiantes}" class="nav-link">
