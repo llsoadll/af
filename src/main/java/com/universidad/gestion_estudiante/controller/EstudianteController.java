@@ -109,6 +109,10 @@ public String mostrarDashboard(
         @RequestParam(required = false) String cuatrimestre,
         Model model) {
 
+        // 1. Obtener estadísticas generales de todos los años
+        EstadisticasDTO estadisticasGenerales = service.obtenerEstadisticasGenerales();
+        model.addAttribute("estadisticasGenerales", estadisticasGenerales);
+
     if (anio == null) {
         anio = Year.now().getValue(); // Año actual
     }
@@ -154,4 +158,13 @@ public String mostrarDashboard(
     return "dashboard";
 }
 
+
+@GetMapping("/estadisticas-globales")
+    public String mostrarEstadisticasGlobales(Model model) {
+        // Obtener las estadísticas generales de todos los años
+        EstadisticasDTO estadisticasGenerales = service.obtenerEstadisticasGenerales();
+        model.addAttribute("estadisticasGenerales", estadisticasGenerales);
+        
+        return "estadisticas-globales"; // Esto debe coincidir exactamente con el nombre del archivo HTML
+    }
 }

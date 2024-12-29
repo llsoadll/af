@@ -109,20 +109,50 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
-    public EstadisticasDTO obtenerEstadisticasGenerales() {
-        List<Estudiante> todosLosEstudiantes = estudianteRepository.findAll();
-        EstadisticasDTO estadisticas = new EstadisticasDTO();
-        
-        estadisticas.setTotalEstudiantes(todosLosEstudiantes.size());
-        estadisticas.setCantidadRegulares((int) todosLosEstudiantes.stream()
-            .filter(e -> "regular".equalsIgnoreCase(e.getCondicion()))
-            .count());
-        estadisticas.setCantidadPromocionados((int) todosLosEstudiantes.stream()
-            .filter(e -> "promocion".equalsIgnoreCase(e.getCondicion()))
-            .count());
-            
-        return estadisticas;
-    }
+public EstadisticasDTO obtenerEstadisticasGenerales() {
+    List<Estudiante> todosLosEstudiantes = estudianteRepository.findAll();
+    EstadisticasDTO estadisticas = new EstadisticasDTO();
+    
+    // Calcular estadísticas totales
+    estadisticas.setTotalEstudiantes(todosLosEstudiantes.size());
+    
+    // Contar promocionados y regulares
+    long cantidadPromocionados = todosLosEstudiantes.stream()
+        .filter(e -> "promocion".equalsIgnoreCase(e.getCondicion()) || 
+                     "promoción".equalsIgnoreCase(e.getCondicion()))
+        .count();
+    
+    long cantidadRegulares = todosLosEstudiantes.stream()
+        .filter(e -> "regular".equalsIgnoreCase(e.getCondicion()))
+        .count();
+    
+    // Calcular promedio general
+    double promedioGeneral = todosLosEstudiantes.stream()
+        .filter(e -> e.getNotaFinal() != null)
+        .mapToDouble(Estudiante::getNotaFinal)
+        .average()
+        .orElse(0.0);
+    
+    // Calcular distribución de notas
+    int[] distribucion = new int[5];
+    todosLosEstudiantes.stream()
+        .filter(e -> e.getNotaFinal() != null)
+        .forEach(e -> {
+            double nota = e.getNotaFinal();
+            if (nota >= 1 && nota <= 2) distribucion[0]++;
+            else if (nota > 2 && nota <= 4) distribucion[1]++;
+            else if (nota > 4 && nota <= 6) distribucion[2]++;
+            else if (nota > 6 && nota <= 8) distribucion[3]++;
+            else if (nota > 8 && nota <= 10) distribucion[4]++;
+        });
+    
+    estadisticas.setCantidadRegulares((int) cantidadRegulares);
+    estadisticas.setCantidadPromocionados((int) cantidadPromocionados);
+    estadisticas.setPromedioNotas(promedioGeneral);
+    estadisticas.setDistribucionNotas(distribucion);
+    
+    return estadisticas;
+}
 
     @Override
     public Double obtenerPromedioPorCuatrimestre(String cuatrimestre) {
