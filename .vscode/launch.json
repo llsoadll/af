@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-GestionEstudianteApplication",
+            "request": "launch",
+            "mainClass": "com.universidad.gestion_estudiante.GestionEstudianteApplication",
+            "projectName": "gestion-estudiante",
+            "env": {
+                "DATABASE_URL": "jdbc:postgresql://ep-yellow-darkness-a85o2llp.eastus2.azure.neon.tech/neondb?sslmode=require",
+                "PGUSER": "neondb_owner",
+                "POSTGRES_PASSWORD": "KILXh0r5TEtU",
+                "SPRING_PROFILES_ACTIVE": "prod",
+                "PORT": "8080"
+            }
+        }
+    ]
+}

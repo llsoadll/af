@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: gestion-estudiante
+    env: docker
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: DATABASE_URL
+        value: jdbc:postgresql://ep-yellow-darkness-a85o2llp.eastus2.azure.neon.tech/neondb?sslmode=require
+      - key: PGUSER
+        value: neondb_owner
+      - key: POSTGRES_PASSWORD
+        value: KILXh0r5TEtU
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8080
+      - key: spring.mail.username
+        value: sanchezpabloef@gmail.com
+      - key: spring.mail.password  
+        value: ywwy cqpn oapd rink
