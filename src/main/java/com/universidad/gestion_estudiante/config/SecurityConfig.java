@@ -53,9 +53,22 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/", true)  // Cambiado a "/" con true para forzar redirección
                 .permitAll()
             )
+            
             .logout(logout -> logout
                 .permitAll()
-            );
+            )
+
+        // Agregar configuración de sesión
+        .sessionManagement(session -> session
+            .invalidSessionUrl("/login")
+            .maximumSessions(1)
+            .maxSessionsPreventsLogin(false)
+        )
+        // Agregar remember me
+        .rememberMe(remember -> remember
+            .key("uniqueAndSecret")
+            .tokenValiditySeconds(86400));
+            
         
         return http.build();
     }
