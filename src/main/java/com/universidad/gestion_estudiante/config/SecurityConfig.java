@@ -23,7 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
         .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+        .requestMatchers("/css/**", "/js/**", "/images/**", "/manifest.json", "/service-worker.js").permitAll()
+        .requestMatchers("/login", "/forgot-password", "/reset-password").permitAll()
+        .requestMatchers("/ws/**").permitAll()
         // 1) Primero permitimos /registro y /usuarios/registro
         .requestMatchers("/registro", "/usuarios/registro").permitAll()
         .requestMatchers("/usuarios/registro/**").permitAll()  // Add this line
@@ -48,29 +50,18 @@ public class SecurityConfig {
 .ignoringRequestMatchers("/calendario/eventos/**") // Ignora CSRF para endpoints del calendario
 )
 
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true)  // Cambiado a "/" con true para forzar redirección
-                .permitAll()
-            )
-            
-            .logout(logout -> logout
-                .permitAll()
-            )
+.formLogin(form -> form
+.loginPage("/login")
+.defaultSuccessUrl("/dashboard", true)  // Cambiar esto
+.permitAll()
+)
+.sessionManagement(session -> session
+.invalidSessionUrl("/login")
+.maximumSessions(1)
+.maxSessionsPreventsLogin(false)
+);
 
-        // Agregar configuración de sesión
-        .sessionManagement(session -> session
-            .invalidSessionUrl("/login")
-            .maximumSessions(1)
-            .maxSessionsPreventsLogin(false)
-        )
-        // Agregar remember me
-        .rememberMe(remember -> remember
-            .key("uniqueAndSecret")
-            .tokenValiditySeconds(86400));
-            
-        
-        return http.build();
+return http.build();
     }
 
     
