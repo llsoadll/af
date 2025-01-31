@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout}">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>Registros de Auditoría</title>
 </head>
 <body>
@@ -21,12 +22,16 @@
                         <strong>Acción:</strong> <span th:text="${registro.accion}"></span><br>
                         <strong>Entidad:</strong> <span th:text="${registro.entidad}"></span>
                     </p>
+                    
                     <!-- Botón para mostrar/ocultar detalles -->
-                    <button class="btn btn-link btn-sm p-0" type="button" 
-                            th:data-bs-target="${'#detalles-' + registro.id}" 
-                            data-bs-toggle="collapse">
-                        Ver detalles
-                    </button>
+                    <a class="btn btn-link btn-sm p-0 text-primary" 
+                       data-bs-toggle="collapse" 
+                       th:href="${'#detalles-' + registro.id}" 
+                       role="button" 
+                       aria-expanded="false">
+                        <i class="fas fa-chevron-down me-1"></i>Ver detalles
+                    </a>
+                    
                     <!-- Detalles colapsables -->
                     <div class="collapse mt-2" th:id="${'detalles-' + registro.id}">
                         <div class="card card-body bg-light">
