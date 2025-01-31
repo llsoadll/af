@@ -62,61 +62,100 @@
         <div class="card">
             <div class="card-body">
                 <div th:if="${searchTerm != null or legajoSearch != null}" class="mt-4">
-                    <div th:if="${not #lists.isEmpty(estudiantes)}" class="table-responsive-sm">
+                    <!-- Resultados encontrados -->
+                    <div th:if="${not #lists.isEmpty(estudiantes)}">
                         <div class="alert alert-info d-flex align-items-center">
                             <i class="fas fa-info-circle me-2"></i>
                             Se encontraron <span class="fw-bold mx-1" th:text="${#lists.size(estudiantes)}"></span> resultados.
                         </div>
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Legajo</th>
-                                    <th>Condición</th>
-                                    <th>Nota</th>
-                                    <!-- Ocultar estas columnas en móviles usando d-none d-md-table-cell -->
-                                    <th class="d-none d-md-table-cell">Cuatrimestre</th>
-                                    <th class="d-none d-md-table-cell">Año</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="estudiante : ${estudiantes}">
-                                    <td th:text="${estudiante.nombreApellido}"></td>
-                                    <td><span class="badge bg-secondary" th:text="${estudiante.legajo}"></span></td>
-                                    <td>
+                        
+                        <!-- Vista móvil (cards) -->
+                        <div class="d-md-none">
+                            <div class="card mb-3" th:each="estudiante : ${estudiantes}">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${estudiante.nombreApellido}"></h5>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-secondary" th:text="${estudiante.legajo}"></span>
                                         <span th:with="condicion=${#strings.toLowerCase(estudiante.condicion)}"
-                                              th:class="${condicion == 'promoción' || condicion == 'promocion'} ? 'badge bg-success text-white' : 'badge bg-primary'"
+                                              th:class="${condicion == 'promoción' || condicion == 'promocion'} ? 'badge bg-success' : 'badge bg-primary'"
                                               th:text="${estudiante.condicion}">
                                         </span>
-                                    </td>
-                                    <td th:text="${estudiante.notaFinal}"></td>
-                                    <td class="d-none d-md-table-cell" th:text="${estudiante.cuatrimestre}"></td>
-                                    <td class="d-none d-md-table-cell" th:text="${estudiante.anio}"></td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                                               th:href="@{/editar/{id}(id=${estudiante.id})}" 
-                                               class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form th:if="${#authentication.name == 'llsoadll'}"
-                                                  th:action="@{/eliminar/{id}(id=${estudiante.id})}" 
-                                                  method="post" 
-                                                  class="d-inline ms-1">
-                                                <button type="submit" 
-                                                        class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </div>
+                                    <p class="card-text">
+                                        <strong>Nota:</strong> <span th:text="${estudiante.notaFinal}"></span><br>
+                                        <strong>Cuatrimestre:</strong> <span th:text="${estudiante.cuatrimestre}"></span><br>
+                                        <strong>Año:</strong> <span th:text="${estudiante.anio}"></span>
+                                    </p>
+                                    <div class="btn-group">
+                                        <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                                           th:href="@{/editar/{id}(id=${estudiante.id})}" 
+                                           class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form th:if="${#authentication.name == 'llsoadll'}"
+                                              th:action="@{/eliminar/{id}(id=${estudiante.id})}" 
+                                              method="post" 
+                                              class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <!-- Vista desktop (tabla) -->
+                        <div class="table-responsive d-none d-md-block">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Legajo</th>
+                                        <th>Condición</th>
+                                        <th>Nota</th>
+                                        <th>Cuatrimestre</th>
+                                        <th>Año</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="estudiante : ${estudiantes}">
+                                        <td th:text="${estudiante.nombreApellido}"></td>
+                                        <td><span class="badge bg-secondary" th:text="${estudiante.legajo}"></span></td>
+                                        <td>
+                                            <span th:with="condicion=${#strings.toLowerCase(estudiante.condicion)}"
+                                                  th:class="${condicion == 'promoción' || condicion == 'promocion'} ? 'badge bg-success' : 'badge bg-primary'"
+                                                  th:text="${estudiante.condicion}">
+                                            </span>
+                                        </td>
+                                        <td th:text="${estudiante.notaFinal}"></td>
+                                        <td th:text="${estudiante.cuatrimestre}"></td>
+                                        <td th:text="${estudiante.anio}"></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                                                   th:href="@{/editar/{id}(id=${estudiante.id})}" 
+                                                   class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form th:if="${#authentication.name == 'llsoadll'}"
+                                                      th:action="@{/eliminar/{id}(id=${estudiante.id})}" 
+                                                      method="post" 
+                                                      class="d-inline ms-1">
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
-                    
+        
+                    <!-- Mensaje cuando no hay resultados -->
                     <div th:if="${#lists.isEmpty(estudiantes)}" class="alert alert-warning d-flex align-items-center">
                         <i class="fas fa-exclamation-triangle me-2"></i>
                         No se encontraron estudiantes que coincidan con la búsqueda.
@@ -124,7 +163,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     <script th:inline="javascript">
         function eliminarEstudiante(id) {

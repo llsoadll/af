@@ -7,32 +7,36 @@
 <body>
     <div layout:fragment="content">
         <h2 class="mb-4" style="color: #006766;">Registros de Auditoría</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Usuario</th>
-                    <th>Nombre Completo</th>
-                    <th>Acción</th>
-                    <th>Entidad</th>
-                    <th>Detalles</th>
-                    <th>IP</th>
-                    <th>Navegador</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="registro : ${registros}">
-                    <td th:text="${registro.usuario}"></td>
-                    <td th:text="${registro.nombreCompleto}"></td>
-                    <td th:text="${registro.accion}"></td>
-                    <td th:text="${registro.entidad}"></td>
-                    <td th:text="${registro.detalles}"></td>
-                    <td th:text="${registro.ip}"></td>
-                    <td th:text="${registro.navegador}"></td>
-                    <td th:text="${#temporals.format(registro.fecha, 'dd/MM/yyyy HH:mm:ss')}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive-sm">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Acción</th>
+                        <th>Entidad</th>
+                        <!-- Columnas que se ocultarán en móviles -->
+                        <th class="d-none d-md-table-cell">Detalles</th>
+                        <th class="d-none d-md-table-cell">IP</th>
+                        <th class="d-none d-md-table-cell">Navegador</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="registro : ${registros}">
+                        <td th:text="${registro.usuario}"></td>
+                        <td th:text="${registro.nombreCompleto}"></td>
+                        <td th:text="${registro.accion}"></td>
+                        <td th:text="${registro.entidad}"></td>
+                        <!-- Celdas que se ocultarán en móviles -->
+                        <td class="d-none d-md-table-cell" th:text="${registro.detalles}"></td>
+                        <td class="d-none d-md-table-cell" th:text="${registro.ip}"></td>
+                        <td class="d-none d-md-table-cell" th:text="${registro.navegador}"></td>
+                        <td th:text="${#temporals.format(registro.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
