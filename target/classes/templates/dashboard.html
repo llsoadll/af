@@ -18,11 +18,11 @@
                         <label for="anio" class="form-label">Año:</label>
                         <select class="form-select" id="anio" name="anio" required>
                             <option value="">Seleccione año...</option>
-                            <option th:each="year : ${#numbers.sequence(2017, 2024)}" 
-                                    th:value="${year}" 
-                                    th:text="${year}"
-                                    th:selected="${year == selectedAnio}">
-                            </option>
+                            <option th:each="year : ${#numbers.sequence(anioInicio, anioFin)}" 
+        th:value="${year}" 
+        th:text="${year}"
+        th:selected="${year == selectedAnio}">
+</option>
                         </select>
                     </div>
                     <div class="col-md-4">

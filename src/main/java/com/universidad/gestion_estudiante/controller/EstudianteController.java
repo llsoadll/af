@@ -108,6 +108,10 @@ public String mostrarDashboard(
         @RequestParam(required = false) Integer anio,
         @RequestParam(required = false) String cuatrimestre,
         Model model) {
+    
+    int anioActual = Year.now().getValue();
+    model.addAttribute("anioInicio", 2017);
+    model.addAttribute("anioFin", anioActual);
 
     // Si no se especifica año o cuatrimestre, usar valores por defecto
     if (anio == null) {
