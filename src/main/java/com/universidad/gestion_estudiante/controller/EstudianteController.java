@@ -103,24 +103,25 @@ public String cargarCsv(@RequestParam("file") MultipartFile file, RedirectAttrib
     return "redirect:/estudiantes";
 }
 
-    @GetMapping("/dashboard")
+@GetMapping("/dashboard")
 public String mostrarDashboard(
         @RequestParam(required = false) Integer anio,
         @RequestParam(required = false) String cuatrimestre,
         Model model) {
 
-        // 1. Obtener estadísticas generales de todos los años
-        EstadisticasDTO estadisticasGenerales = service.obtenerEstadisticasGenerales();
-        model.addAttribute("estadisticasGenerales", estadisticasGenerales);
-
+    // Si no se especifica año o cuatrimestre, usar valores por defecto
     if (anio == null) {
-        anio = Year.now().getValue(); // Año actual
+        anio = 2024; // Año por defecto
     }
     if (cuatrimestre == null) {
-        cuatrimestre = "segundo"; // O "primer", según corresponda
+        cuatrimestre = "segundo"; // Cuatrimestre por defecto
     }
 
-    // Obtener estadísticas del período actual
+    // Obtener estadísticas generales de todos los años
+    EstadisticasDTO estadisticasGenerales = service.obtenerEstadisticasGenerales();
+    model.addAttribute("estadisticasGenerales", estadisticasGenerales);
+
+    // Obtener estadísticas del período seleccionado
     EstadisticasDTO estadisticas = service.obtenerEstadisticas(anio, cuatrimestre);
     model.addAttribute("estadisticas", estadisticas);
     model.addAttribute("selectedAnio", anio);
